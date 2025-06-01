@@ -12,3 +12,10 @@ app.use(exp.json())
 app.listen(process.env.PORT, () => {
     console.log('Servidor en linea')
 });
+
+const modeloCliente = require('./backend/models/cliente.model')
+
+app.get('/clientes', async (req, res) => {
+    let listaCliente = await modeloCliente.find()
+    console.log(listaCliente)
+});
