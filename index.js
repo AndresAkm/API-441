@@ -18,8 +18,8 @@ app.get('/clientes',async(req,res)=>{
         res.status(404).json({error:'No se encontraron productos'})
 });
 
-app.get('/clientes/:ref',async(req,res)=>{
-    let listaCliente = await modelCliente.findOne({_id:req.params.ref});
+app.get('/clientes/:id',async(req,res)=>{
+    let listaCliente = await modelCliente.findOne({_id:req.params.id});
     if(listaCliente)
         res.status(200).json(listaCliente);
     else
@@ -41,18 +41,40 @@ app.post('/clientes', async (req, res) => {
         res.status(400),json({Mensaje: "Se presentó un error"})
 })
 
-app.put('/clientes/:ref', async (req, res) => {
+app.put('/clientes/:id', async (req, res) => {
     const clienteEditado = {
         documento: req.body.doc,
         nombreCompleto: req.body.nc,
         fNacimiento: req.body.fn
     };
 
-    let actualizacion = await modelCliente.findOneAndUpdate({_id: req.params.ref }, clienteEditado);
+    let actualizacion = await modelCliente.findOneAndUpdate({_id: req.params.id }, clienteEditado);
     if (actualizacion)
         res.status(200).json({ "mensaje": "actualización exitosa" });
     else
         res.status(404).json({ "mensaje": "Se presentó un error" });
+});
+
+app.patch('/clientes/:id', async (req, res) => {
+    const campos = {};
+    if (req.body.doc) campos.documento = req.body.doc;
+    if (req.body.nc) campos.nombreCompleto = req.body.nc;
+    if (req.body.fn) campos.fNacimiento = req.body.fn;
+
+    try {
+        let actualizacion = await modelCliente.updateOne(
+            {_id: req.params.id},
+            {$set: campos},
+            {new: true}
+        )
+        if (actualizacion)
+            res.status(200).json({ "mensaje": "actualización exitosa" });
+        else
+            res.status(404).json({ "mensaje": "Se presentó un error" });
+
+    } catch {
+        res.status(500).json({ "Mensaje": "Se presentó un error"})
+    }
 });
 
 app.delete('/clientes/:id', async (req, res) => {
@@ -68,3 +90,5 @@ app.delete('/clientes/:id', async (req, res) => {
 app.listen(process.env.PORT,( )=>{
     console.log('servidor en linea')
 });
+
+const modelProductos = require("./backend/models/productos.model")
