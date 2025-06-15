@@ -3,11 +3,11 @@ const mongoose = require('../config/connetiondb')
 
 const schemaCliente = new mongoose.Schema({
 
-    document: {
+    documento: {
         type: String,
         required: [true,'El documento es obligatorio'],
         minLength: [7, 'El documento es demasiado corto'],
-        kMaxLength: [10, 'El documento es demasiado largo']
+        maxLength: [10, 'El documento es demasiado largo']
 
     },
 
@@ -17,9 +17,15 @@ const schemaCliente = new mongoose.Schema({
     },
 
     fNacimiento: {
-        type: Date,
-        max: Date.now
+        type: String,
+        required: [true,'El documento es obligatorio'],
+        minLength: 10,
+        maxLength: 10
+
     }
+
+}, {
+    versionKey: false
 })
 
 const cliente = mongoose.model('Clientes', schemaCliente)
