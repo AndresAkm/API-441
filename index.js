@@ -41,6 +41,30 @@ app.post('/clientes', async (req, res) => {
         res.status(400),json({Mensaje: "Se presentó un error"})
 })
 
+app.put('/clientes/:ref', async (req, res) => {
+    const clienteEditado = {
+        documento: req.body.doc,
+        nombreCompleto: req.body.nc,
+        fNacimiento: req.body.fn
+    };
+
+    let actualizacion = await modelCliente.findOneAndUpdate({_id: req.params.ref }, clienteEditado);
+    if (actualizacion)
+        res.status(200).json({ "mensaje": "actualización exitosa" });
+    else
+        res.status(404).json({ "mensaje": "Se presentó un error" });
+});
+
+app.delete('/clientes/:id', async (req, res) => {
+
+    let eliminacion = await modelCliente.findOneAndDelete({_id: req.params.id });
+
+    if (eliminacion)
+        res.status(200).json({ "mensaje": "eliminacion exitosa" });
+    else
+        res.status(404).json({ "mensaje": "Se presentó un error" });
+});
+
 app.listen(process.env.PORT,( )=>{
     console.log('servidor en linea')
 });
