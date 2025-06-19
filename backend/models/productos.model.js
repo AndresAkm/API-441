@@ -17,10 +17,7 @@ const schemaProductos = new mongoose.Schema({
     disponible: {
         type: Boolean,
         default: true,
-        required: [true,'El documento es obligatorio'],
-        minLength: 10,
-        maxLength: 10
-
+        required: [true,'La disponibilidad es obligatoria']
     }
 
 }, {
